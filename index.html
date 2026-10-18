@@ -7,48 +7,84 @@
 <!-- Supabase JS Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
-header{background:#243b8f;color:#fff;padding:18px 16px}.top{max-width:900px;margin:auto}
-h1{font-size:23px;margin:0 0 5px}.tagline{font-size:13px;opacity:.9}
-.search{margin-top:14px;width:100%;padding:13px;border:0;border-radius:10px;font-size:16px}
-main{max-width:900px;margin:auto;padding:18px 14px 90px}.hero,.modal-box{background:#fff;border-radius:16px;padding:20px;box-shadow:0 3px 12px #0001}
-.hero{margin-bottom:18px}.hero h2{margin-top:0}.hero p{color:#667085;line-height:1.5}
-.section-title{font-size:19px;margin:20px 0 12px}.categories{display:flex;gap:9px;overflow:auto}
-.cat{border:0;background:#fff;padding:11px 14px;border-radius:10px;white-space:nowrap;cursor:pointer}.cat.active{background:#243b8f;color:#fff}
-.products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 12px #0001}
-.card img{width:100%;height:150px;object-fit:cover}.card-body{padding:12px}.price{font-weight:bold;color:#243b8f;margin:7px 0}
-.card.soldout img{filter:grayscale(1);opacity:.6}
-.buy,.submit{width:100%;border:0;border-radius:9px;padding:12px;background:#243b8f;color:#fff;font-weight:bold;font-size:15px;cursor:pointer}
-.buy.soldout{background:#98a2b3;cursor:not-allowed}
-.admin-btn{margin-top:12px;background:#fff;color:#243b8f;border:0;border-radius:9px;padding:10px 14px;font-weight:bold;cursor:pointer}
-.badge{display:none;background:#d92d20;color:#fff;border-radius:10px;padding:2px 8px;font-size:12px;margin-left:4px}
-.modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;padding:15px;overflow:auto}.modal-box{max-width:560px;margin:20px auto}
-.close{float:right;border:0;background:#eee;border-radius:8px;padding:8px 11px;cursor:pointer}
+/* ===== 1. BASE ===== */
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+h1{font-size:23px;margin:0 0 5px}
 label{display:block;font-weight:bold;font-size:13px;margin:12px 0 5px}
 input,textarea,select{width:100%;padding:12px;border:1px solid #ccd1da;border-radius:9px;font-size:15px}
-textarea{min-height:80px}.submit{background:#079455;margin-top:16px}
+textarea{min-height:80px}
+
+/* ===== 2. HEADER + SEARCH ===== */
+header{background:#243b8f;color:#fff;padding:18px 16px}
+.top{max-width:900px;margin:auto}
+.tagline{font-size:13px;opacity:.9}
+.search{margin-top:14px;width:100%;padding:13px;border:0;border-radius:10px;font-size:16px}
+
+/* ===== 3. PAGE LAYOUT + CARDS ===== */
+main{max-width:900px;margin:auto;padding:18px 14px 90px}
+.hero,.modal-box{background:#fff;border-radius:16px;padding:20px;box-shadow:0 3px 12px #0001}
+.hero{margin-bottom:18px}
+.hero h2{margin-top:0}
+.hero p{color:#667085;line-height:1.5}
+.section-title{font-size:19px;margin:20px 0 12px}
 .notice{background:#eef4ff;color:#243b8f;padding:12px;border-radius:10px;margin-top:12px;line-height:1.5;font-size:13px}
-.order-item{background:#fff;border:1px solid #e0e4ec;border-radius:12px;padding:13px;margin-top:10px}.status{color:#243b8f;font-weight:bold}
+
+/* ===== 4. CATEGORIES + PRODUCT GRID ===== */
+.categories{display:flex;gap:9px;overflow:auto}
+.cat{border:0;background:#fff;padding:11px 14px;border-radius:10px;white-space:nowrap;cursor:pointer}
+.cat.active{background:#243b8f;color:#fff}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 12px #0001}
+.card img{width:100%;height:150px;object-fit:cover}
+.card-body{padding:12px}
+.price{font-weight:bold;color:#243b8f;margin:7px 0}
+.card.soldout img{filter:grayscale(1);opacity:.6}
+
+/* ===== 5. BUTTONS ===== */
+.buy,.submit{width:100%;border:0;border-radius:9px;padding:12px;background:#243b8f;color:#fff;font-weight:bold;font-size:15px;cursor:pointer}
+.submit{background:#079455;margin-top:16px}
+.buy.soldout{background:#98a2b3;cursor:not-allowed}
+.admin-btn{margin-top:12px;background:#fff;color:#243b8f;border:0;border-radius:9px;padding:10px 14px;font-weight:bold;cursor:pointer}
 .mini{padding:8px;border:0;border-radius:8px;font-weight:bold;cursor:pointer;font-size:13px}
+.close{float:right;border:0;background:#eee;border-radius:8px;padding:8px 11px;cursor:pointer}
+.badge{display:none;background:#d92d20;color:#fff;border-radius:10px;padding:2px 8px;font-size:12px;margin-left:4px}
+
+/* ===== 6. POP-UP WINDOWS (modals) ===== */
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;padding:15px;overflow:auto}
+.modal-box{max-width:560px;margin:20px auto}
+
+/* ===== 7. ORDERS + ADMIN ===== */
+.order-item{background:#fff;border:1px solid #e0e4ec;border-radius:12px;padding:13px;margin-top:10px}
+.status{color:#243b8f;font-weight:bold}
+.image-preview-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.image-preview-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid #e0e4ec}
+
+/* ===== 8. BOTTOM NAVIGATION ===== */
 .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e0e4ec;display:grid;grid-template-columns:repeat(3,1fr);box-shadow:0 -3px 12px #0001;padding-bottom:env(safe-area-inset-bottom)}
 .bottom-nav button{border:0;background:#fff;padding:10px 4px 9px;font-size:11px;font-weight:bold;color:#475467;cursor:pointer}
 .bottom-nav button span{display:block;font-size:19px;margin-bottom:2px}
-.image-preview-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
-.image-preview-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid #e0e4ec}
+
+/* ===== 9. BIG SCREENS ===== */
 @media(min-width:700px){.products{grid-template-columns:repeat(4,1fr)}.card img{height:180px}}
+
+/* ===== 10. LOGIN GATE (shown before login) ===== */
 body.loggedout{background:#243b8f}
 body.loggedout header,body.loggedout main,body.loggedout .bottom-nav{display:none}
 #authModal{background:linear-gradient(160deg,#243b8f,#16245f)}
 .gate-brand{text-align:center;color:#fff;margin:34px auto 6px;max-width:560px}
-.gate-brand h1{font-size:28px;margin:0 0 6px}.gate-brand div{font-size:14px;opacity:.9}
+.gate-brand h1{font-size:28px;margin:0 0 6px}
+.gate-brand div{font-size:14px;opacity:.9}
 </style>
 </head>
 <body class="loggedout">
+<!-- ===== HEADER (title + search) ===== -->
 <header><div class="top">
 <h1>King Online Market</h1><div class="tagline">Buy • Order • Get Delivered on Campus</div>
 <input id="search" class="search" placeholder="Search products...">
 </div></header>
 
+<!-- ===== BOTTOM MENU (Admin button is hidden unless you are admin) ===== -->
 <nav class="bottom-nav" aria-label="Main navigation">
   <button type="button" onclick="scrollToProducts()"><span>🛍️</span>Products</button>
   <button type="button" onclick="openMyOrders()"><span>📦</span>My Orders</button>
@@ -56,6 +92,7 @@ body.loggedout header,body.loggedout main,body.loggedout .bottom-nav{display:non
   <button type="button" id="adminNavBtn" style="display:none" onclick="openAdminPanel()"><span>🔒</span>Admin <b id="adminBadge" class="badge"></b></button>
 </nav>
 
+<!-- ===== MAIN PAGE (welcome, categories, products) ===== -->
 <main>
 <section class="hero"><h2>Welcome to King Online Market 🛍️</h2><p>Choose a product and place your campus delivery order.</p>
 <div id="authArea" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"></div>
@@ -64,6 +101,7 @@ body.loggedout header,body.loggedout main,body.loggedout .bottom-nav{display:non
 <h2 id="productsSection" class="section-title">Products</h2><div id="products" class="products">Loading products...</div>
 </main>
 
+<!-- ===== POP-UP: PLACE ORDER FORM ===== -->
 <div id="orderModal" class="modal"><div class="modal-box">
 <button class="close" onclick="closeModal('orderModal')">✕</button>
 <h2>📦 Place Your Order</h2>
@@ -105,6 +143,7 @@ body.loggedout header,body.loggedout main,body.loggedout .bottom-nav{display:non
 <button class="submit" type="submit" id="orderSubmitBtn">✅ Place Order</button>
 </form></div></div>
 
+<!-- ===== POP-UP: LOGIN / SIGN UP (the first screen people see) ===== -->
 <div id="authModal" class="modal"><div class="gate-brand"><h1>👑 King Online Market</h1><div>Buy • Order • Get Delivered on Campus</div></div><div class="modal-box">
 <h2 id="authTitle">👤 Login</h2>
 <div id="authNotice" class="notice" style="display:none"></div>
@@ -119,19 +158,20 @@ body.loggedout header,body.loggedout main,body.loggedout .bottom-nav{display:non
 <p style="text-align:center;margin:14px 0 0;font-size:14px"><a href="javascript:void(0)" id="authToggle" onclick="toggleAuthMode()" style="color:#243b8f;font-weight:bold"></a></p>
 </div></div>
 
+<!-- ===== POP-UP: MY ORDERS ===== -->
 <div id="myOrdersModal" class="modal"><div class="modal-box">
 <button class="close" onclick="closeModal('myOrdersModal')">✕</button>
 <h2>📦 My Orders</h2>
 <div id="myOrdersList">Loading...</div>
 </div></div>
 
+<!-- ===== POP-UP: PRODUCT DETAILS ===== -->
 <div id="detailModal" class="modal"><div class="modal-box">
 <button class="close" onclick="closeModal('detailModal')">✕</button>
 <div id="detailContent"></div>
 </div></div>
 
-
-
+<!-- ===== POP-UP: ADMIN DASHBOARD ===== -->
 <div id="adminModal" class="modal"><div class="modal-box">
 <button class="close" onclick="closeModal('adminModal')">✕</button><h2>🧑‍💼 Admin Dashboard</h2>
 <button onclick="logoutAdmin()" style="background:#d92d20;color:#fff;border:0;padding:8px 12px;border-radius:6px;float:right;cursor:pointer">Logout</button>
@@ -164,20 +204,82 @@ Color: Black"></textarea>
 <div id="adminProducts" style="margin-top:15px"></div>
 </div></div>
 
+<!-- ===== SCRIPT (all the app logic, in numbered sections) ===== -->
 <script>
+// ======================================================================
+// 1. SETTINGS  (edit your phone, bank accounts, etc. here)
+// ======================================================================
+
 // Supabase Configuration
 const SUPABASE_URL = 'https://qdtgjhddpdfntcyxxlwz.supabase.co';
+
 const SUPABASE_ANON_KEY = 'sb_publishable_Ir3qLO57DWf3Kgstrt-Ueg_yaENtyTh';
 
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const CONTACT_PHONE = "0993758814";      // your phone number
 
-let products = [], orders = [];
-let selectedProduct = null, selectedCategory = "All";
-let adminSignedIn = false;
+const TELEGRAM_USERNAME = "";            // e.g. "kingmarket" (without @), leave empty to hide
+
+const ACCOUNT_NAME = "Negesse Azmeraw";  // account holder name (same for all)
+
+const PAYMENT_OPTIONS = [
+  { provider: "CBE",      account: "1000475329997" },
+  { provider: "BOA",      account: "39928388" },
+  { provider: "Telebirr", account: "0932160991" }
+];
 
 const STATUSES = ["New Order","Confirmed","Collecting Product","Product Received","Out for Delivery","Delivered","Cancelled"];
 
+const FLOW = ["New Order","Confirmed","Collecting Product","Product Received","Out for Delivery","Delivered"];
+
 const PLACEHOLDER = "https://via.placeholder.com/150";
+
+// ======================================================================
+// 2. SUPABASE CLIENT
+// ======================================================================
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ======================================================================
+// 3. APP STATE (shared variables)
+// ======================================================================
+
+let products = [], orders = [];
+
+let selectedProduct = null, selectedCategory = "All";
+
+let adminSignedIn = false;
+
+let DEPOSIT_AMOUNT = 50;                  // required deposit in ETB; loaded from Supabase
+
+let studentPhotoFile = null;
+
+let paymentProofFile = null;
+
+let currentUser = null;
+
+let authMode = "login";
+
+let pendingOrderProductId = null;
+
+const signedCache = new Map();
+
+let orderListToken = 0;
+
+// ======================================================================
+// 4. SMALL HELPERS
+// ======================================================================
+
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, function(ch){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch];
+  });
+}
+
+function shortId(id){ return String(id ?? "").replace(/-/g, "").slice(0, 8).toUpperCase(); }
+
+function openModal(id){document.getElementById(id).style.display="block"}
+
+function closeModal(id){document.getElementById(id).style.display="none"}
 
 function getProductImages(p){
   let imgs = [];
@@ -191,95 +293,26 @@ function scrollToProducts(){
   if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
 }
 
-function previewProductImages(input){
-  const files = Array.from(input.files || []);
-  const box = document.getElementById("productImagePreview");
-  if(files.length > 5){
-    alert("❌ You can select a maximum of 5 images.");
-    input.value = "";
-    box.innerHTML = "";
-    return;
-  }
-  box.innerHTML = files.map(file => `<img src="${URL.createObjectURL(file)}" alt="Product preview">`).join("");
+function isSoldOut(p){ return Number(p.stock ?? 1) <= 0; }
+
+function toIntlPhone(phone){
+  const d = String(phone || "").replace(/\D/g, "");
+  if(d.startsWith("251")) return "+" + d;
+  if(d.startsWith("0")) return "+251" + d.slice(1);
+  if(d.length === 9) return "+251" + d;
+  return "+" + d;
 }
 
-async function loadDepositAmount(){
-  try{
-    const {data,error} = await db.from("market_settings").select("deposit_amount").eq("id",1).maybeSingle();
-    if(!error && data && data.deposit_amount !== null){
-      DEPOSIT_AMOUNT = Number(data.deposit_amount);
-    }
-  }catch(e){ console.warn("Deposit settings unavailable", e); }
-  renderDepositInfo();
-  const a = document.getElementById("adminDepositAmount");
-  const i = document.getElementById("adminDepositInput");
-  if(a) a.textContent = Number(DEPOSIT_AMOUNT).toLocaleString();
-  if(i) i.value = DEPOSIT_AMOUNT;
-}
+// ======================================================================
+// 5. STOREFRONT: products, categories, details, deposit info, contact
+// ======================================================================
 
-async function saveDepositAmount(){
-  const input = document.getElementById("adminDepositInput");
-  const amount = Number(input && input.value);
-  if(!Number.isFinite(amount) || amount < 0){ alert("❌ Enter a valid deposit amount."); return; }
-  const {error} = await db.from("market_settings").upsert({id:1, deposit_amount:amount, updated_at:new Date().toISOString()});
-  if(error){ alert("❌ Could not save deposit amount: " + error.message); return; }
-  DEPOSIT_AMOUNT = amount;
-  renderDepositInfo();
-  document.getElementById("adminDepositAmount").textContent = amount.toLocaleString();
-  alert("✅ Deposit amount updated to ETB " + amount.toLocaleString());
-}
-
-// ===== Contact info (change these) =====
-const CONTACT_PHONE = "0993758814";      // your phone number
-const TELEGRAM_USERNAME = "";            // e.g. "kingmarket" (without @), leave empty to hide
-
-// ===== Deposit / prepayment info (change these) =====
-let DEPOSIT_AMOUNT = 50;                  // required deposit in ETB; loaded from Supabase
-const ACCOUNT_NAME = "Negesse Azmeraw";  // account holder name (same for all)
-const PAYMENT_OPTIONS = [
-  { provider: "CBE",      account: "1000475329997" },
-  { provider: "BOA",      account: "39928388" },
-  { provider: "Telebirr", account: "0932160991" }
-];
-
-function renderDepositInfo(){
-  document.getElementById("depositAmount").textContent = Number(DEPOSIT_AMOUNT).toLocaleString();
-  document.getElementById("depositName").textContent = ACCOUNT_NAME;
-  document.getElementById("depositAccounts").innerHTML = PAYMENT_OPTIONS
-    .map(o => `<b>${escapeHtml(o.provider)}:</b> ${escapeHtml(o.account)}`)
-    .join("<br>");
-}
-
-function escapeHtml(value){
-  return String(value ?? "").replace(/[&<>"']/g, function(ch){
-    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch];
-  });
-}
-
-function renderContact(){
-  const box = document.getElementById("contactBox");
-  if(!CONTACT_PHONE || CONTACT_PHONE.includes("X")) return;
-  const tel = CONTACT_PHONE.replace(/\s/g, "");
-  let html = `<b>Need help with your order?</b><br>📞 <a href="tel:${escapeHtml(tel)}" style="color:#243b8f;font-weight:bold">${escapeHtml(CONTACT_PHONE)}</a>`;
-  if(TELEGRAM_USERNAME){
-    html += ` &nbsp;•&nbsp; ✈️ <a href="https://t.me/${escapeHtml(TELEGRAM_USERNAME)}" target="_blank" rel="noopener" style="color:#243b8f;font-weight:bold">Telegram</a>`;
-  }
-  box.innerHTML = html;
-  box.style.display = "block";
-}
-
-function openModal(id){document.getElementById(id).style.display="block"}
-function closeModal(id){document.getElementById(id).style.display="none"}
-
-// ===== Products =====
 async function fetchProducts(){
   const { data, error } = await db.from('products').select('*').order('created_at', { ascending: false });
   if(error) { console.error(error); alert("Error fetching products: " + error.message); return; }
   products = data || [];
   render();
 }
-
-function isSoldOut(p){ return Number(p.stock ?? 1) <= 0; }
 
 function render(){
   const cats = ["All", ...new Set(products.map(p => p.category).filter(Boolean))];
@@ -304,10 +337,7 @@ function render(){
   }).join("") || "<div class='order-item'>No products found.</div>";
 }
 
-document.getElementById("orderForm").addEventListener("input", e => { e.target.style.borderColor = ""; });
-
 function setCategory(c){ selectedCategory = c; render(); }
-document.getElementById("search").addEventListener("input", render);
 
 function parseSpecs(text){
   return String(text || "").split("\n").map(l => l.trim()).filter(Boolean).map(line => {
@@ -342,6 +372,44 @@ function showDetail(id){
     <button class="buy ${isSoldOut(p) ? 'soldout' : ''}" style="margin-top:16px" ${isSoldOut(p) ? 'disabled' : ''} onclick="closeModal('detailModal');openOrder(${p.id})">${isSoldOut(p) ? 'Sold out' : 'Order Now'}</button>`;
   openModal("detailModal");
 }
+
+function renderDepositInfo(){
+  document.getElementById("depositAmount").textContent = Number(DEPOSIT_AMOUNT).toLocaleString();
+  document.getElementById("depositName").textContent = ACCOUNT_NAME;
+  document.getElementById("depositAccounts").innerHTML = PAYMENT_OPTIONS
+    .map(o => `<b>${escapeHtml(o.provider)}:</b> ${escapeHtml(o.account)}`)
+    .join("<br>");
+}
+
+function renderContact(){
+  const box = document.getElementById("contactBox");
+  if(!CONTACT_PHONE || CONTACT_PHONE.includes("X")) return;
+  const tel = CONTACT_PHONE.replace(/\s/g, "");
+  let html = `<b>Need help with your order?</b><br>📞 <a href="tel:${escapeHtml(tel)}" style="color:#243b8f;font-weight:bold">${escapeHtml(CONTACT_PHONE)}</a>`;
+  if(TELEGRAM_USERNAME){
+    html += ` &nbsp;•&nbsp; ✈️ <a href="https://t.me/${escapeHtml(TELEGRAM_USERNAME)}" target="_blank" rel="noopener" style="color:#243b8f;font-weight:bold">Telegram</a>`;
+  }
+  box.innerHTML = html;
+  box.style.display = "block";
+}
+
+async function loadDepositAmount(){
+  try{
+    const {data,error} = await db.from("market_settings").select("deposit_amount").eq("id",1).maybeSingle();
+    if(!error && data && data.deposit_amount !== null){
+      DEPOSIT_AMOUNT = Number(data.deposit_amount);
+    }
+  }catch(e){ console.warn("Deposit settings unavailable", e); }
+  renderDepositInfo();
+  const a = document.getElementById("adminDepositAmount");
+  const i = document.getElementById("adminDepositInput");
+  if(a) a.textContent = Number(DEPOSIT_AMOUNT).toLocaleString();
+  if(i) i.value = DEPOSIT_AMOUNT;
+}
+
+// ======================================================================
+// 6. ORDER FORM: open, photos, payment screenshot, validation, submit
+// ======================================================================
 
 function openOrder(id){
   selectedProduct = products.find(p => p.id === id);
@@ -378,9 +446,6 @@ function openOrder(id){
   openModal("orderModal");
 }
 
-// ===== Student photo (camera or gallery, compressed) =====
-let studentPhotoFile = null;
-
 function setPhoto(input){
   const file = input.files[0];
   if(!file) return;
@@ -399,9 +464,6 @@ function clearPhoto(){
   studentPhotoFile = null;
   document.getElementById("photoPreview").innerHTML = "";
 }
-
-// ===== Payment proof screenshot =====
-let paymentProofFile = null;
 
 function setPaymentProof(input){
   const file = input.files[0];
@@ -422,7 +484,6 @@ function clearPaymentProof(){
   document.getElementById("paymentProofPreview").innerHTML = "";
 }
 
-// ===== Submit order (no stock limit) =====
 async function submitOrder(e){
   e.preventDefault();
 
@@ -572,14 +633,9 @@ async function submitOrder(e){
   openMyOrders();
 }
 
-// ===== Student account (sign up / login / my orders) =====
-let currentUser = null;
-let authMode = "login";
-let pendingOrderProductId = null;
-
-const FLOW = ["New Order","Confirmed","Collecting Product","Product Received","Out for Delivery","Delivered"];
-
-function shortId(id){ return String(id ?? "").replace(/-/g, "").slice(0, 8).toUpperCase(); }
+// ======================================================================
+// 7. ACCOUNT: login gate, sign up, login, logout, session
+// ======================================================================
 
 function renderAuthUI(){
   const area = document.getElementById("authArea");
@@ -673,6 +729,35 @@ async function logoutStudent(){
   renderAuthUI();
 }
 
+async function updateSessionUI(session){
+  currentUser = session ? session.user : null;
+  renderAuthUI();
+  document.body.classList.toggle("loggedout", !session);
+  const adminBtn = document.getElementById("adminNavBtn");
+  const nav = document.querySelector(".bottom-nav");
+  if(!session){
+    adminSignedIn = false;
+    adminBtn.style.display = "none";
+    nav.style.gridTemplateColumns = "repeat(3,1fr)";
+    if(document.getElementById("authModal").style.display !== "block") openAuth("login");
+    setBadge(0);
+    document.getElementById("adminModal").style.display = "none";
+    document.getElementById("myOrdersModal").style.display = "none";
+    return;
+  }
+  const { data: roleRow } = await db.from("user_roles")
+    .select("role").eq("user_id", session.user.id).maybeSingle();
+  closeModal("authModal");
+  adminSignedIn = !!roleRow && roleRow.role === "admin";
+  adminBtn.style.display = adminSignedIn ? "" : "none";
+  nav.style.gridTemplateColumns = adminSignedIn ? "repeat(4,1fr)" : "repeat(3,1fr)";
+  refreshBadge();
+}
+
+// ======================================================================
+// 8. MY ORDERS (student)
+// ======================================================================
+
 function myOrderCard(o){
   const price = Number(o.product_price || 0);
   const total = price * Number(o.quantity || 0);
@@ -725,7 +810,10 @@ function openMyOrders(){
   loadMyOrders();
 }
 
-// ===== Admin: session, badge, sound =====
+// ======================================================================
+// 9. ADMIN: badge + sound, open/logout
+// ======================================================================
+
 function setBadge(n){
   const el = document.getElementById("adminBadge");
   if(n > 0){ el.textContent = n; el.style.display = "inline-block"; }
@@ -754,31 +842,6 @@ function beep(){
   }catch(e){}
 }
 
-async function updateSessionUI(session){
-  currentUser = session ? session.user : null;
-  renderAuthUI();
-  document.body.classList.toggle("loggedout", !session);
-  const adminBtn = document.getElementById("adminNavBtn");
-  const nav = document.querySelector(".bottom-nav");
-  if(!session){
-    adminSignedIn = false;
-    adminBtn.style.display = "none";
-    nav.style.gridTemplateColumns = "repeat(3,1fr)";
-    if(document.getElementById("authModal").style.display !== "block") openAuth("login");
-    setBadge(0);
-    document.getElementById("adminModal").style.display = "none";
-    document.getElementById("myOrdersModal").style.display = "none";
-    return;
-  }
-  const { data: roleRow } = await db.from("user_roles")
-    .select("role").eq("user_id", session.user.id).maybeSingle();
-  closeModal("authModal");
-  adminSignedIn = !!roleRow && roleRow.role === "admin";
-  adminBtn.style.display = adminSignedIn ? "" : "none";
-  nav.style.gridTemplateColumns = adminSignedIn ? "repeat(4,1fr)" : "repeat(3,1fr)";
-  refreshBadge();
-}
-
 async function openAdminPanel(){
   if(adminSignedIn){
     await renderAdmin();
@@ -794,14 +857,9 @@ async function logoutAdmin(){
   alert("Logged out.");
 }
 
-// ===== Admin: orders (filter + search) =====
-function toIntlPhone(phone){
-  const d = String(phone || "").replace(/\D/g, "");
-  if(d.startsWith("251")) return "+" + d;
-  if(d.startsWith("0")) return "+251" + d.slice(1);
-  if(d.length === 9) return "+251" + d;
-  return "+" + d;
-}
+// ======================================================================
+// 10. ADMIN: orders (payment check, status, SMS, delete)
+// ======================================================================
 
 function orderMessage(o){
   const product = products.find(p => String(p.id) === String(o.product_id));
@@ -810,7 +868,6 @@ function orderMessage(o){
   return "ሰላም! የ " + name + " ትዕዛዝዎ ተረጋግጧል፣ በፍጥነት እናደርስልዎታለን።" + contact;
 }
 
-const signedCache = new Map();
 async function getSignedUrl(path, bucket = "student-photos"){
   const key = bucket + ":" + path;
   const c = signedCache.get(key);
@@ -924,8 +981,6 @@ async function renderOrderList(){
   document.getElementById("adminOrders").innerHTML = cards.join("") || "<p>No orders yet.</p>";
 }
 
-let orderListToken = 0;
-
 async function renderAdmin(){
   const { data: fetchedOrders, error: err1 } = await db
     .from("orders")
@@ -954,149 +1009,4 @@ async function changeStatus(id, newStatus){
 async function deleteOrder(id){
   if(!confirm("Delete this order? This can't be undone.")) return;
   const { error } = await db.from('orders').delete().eq('id', id);
-  if(error){ alert("Failed to delete order: " + error.message); return; }
-  renderAdmin();
-}
-
-// ===== Admin: products =====
-function renderAdminProducts(){
-  document.getElementById("adminProducts").innerHTML = products.map(p => {
-    const sold = isSoldOut(p);
-    return `
-    <div class="order-item" style="display:flex;gap:12px;align-items:center">
-      <img src="${escapeHtml(getProductImages(p)[0])}"
-           alt="${escapeHtml(p.name)}"
-           style="width:70px;height:70px;object-fit:cover;border-radius:9px">
-      <div style="flex:1"><b>${escapeHtml(p.name)}</b><br>
-      ETB ${Number(p.price).toLocaleString()} •
-      <span style="font-weight:bold;color:${sold ? '#d92d20' : '#079455'}">${sold ? 'Sold out' : 'Available'}</span>
-      <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-        <button type="button" class="mini" onclick="toggleProduct(${p.id})" style="background:${sold ? '#dcfae6' : '#fef0c7'};color:${sold ? '#067647' : '#93370d'}">${sold ? '✅ Mark available' : '⛔ Mark sold out'}</button>
-        <button type="button" class="mini" onclick="editProduct(${p.id})" style="background:#eef4ff;color:#243b8f">✏️ Edit</button>
-        <button type="button" class="mini" onclick="deleteProduct(${p.id})" style="background:#fee4e2;color:#d92d20">🗑️ Delete</button>
-      </div></div>
-    </div>`;
-  }).join("") || "<p>No products yet.</p>";
-}
-
-async function toggleProduct(id){
-  const p = products.find(x => x.id === id);
-  if(!p) return;
-  const newStock = isSoldOut(p) ? 1 : 0;
-  const { error } = await db.from('products').update({ stock: newStock }).eq('id', id);
-  if(error){ alert("Failed to update product: " + error.message); return; }
-  await fetchProducts();
-  renderAdminProducts();
-}
-
-async function editProduct(id){
-  const p = products.find(x => x.id === id);
-  if(!p) return;
-  const name = prompt("Product name:", p.name);
-  if(name === null) return;
-  const priceInput = prompt("Price (ETB):", p.price);
-  if(priceInput === null) return;
-  const price = Number(priceInput);
-  if(!name.trim() || isNaN(price) || price < 0){ alert("❌ Enter a valid name and price."); return; }
-  const description = prompt("Description (shown in product details):", p.description || "");
-  if(description === null) return;
-  const specs = prompt("Specifications, one per line as Key: Value:", p.specs || "");
-  if(specs === null) return;
-
-  const { error } = await db.from('products')
-    .update({ name: name.trim(), price, description: description.trim(), specs: specs.trim() })
-    .eq('id', id);
-  if(error){ alert("Failed to update product: " + error.message); return; }
-  await fetchProducts();
-  renderAdmin();
-}
-
-async function deleteProduct(id){
-  const p = products.find(x => x.id === id);
-  if(!confirm("Delete \"" + (p ? p.name : "this product") + "\"? This can't be undone.")) return;
-  const { error } = await db.from('products').delete().eq('id', id);
-  if(error){ alert("Failed to delete product: " + error.message); return; }
-  await fetchProducts();
-  renderAdmin();
-}
-
-async function addProduct(e){
-  e.preventDefault();
-  const files = Array.from(document.getElementById("pImage").files || []);
-  if(!files.length){ alert("Please select at least 1 product image."); return; }
-  if(files.length > 5){ alert("❌ You can upload a maximum of 5 images."); return; }
-
-  const btn = document.getElementById("pAddBtn");
-  btn.disabled = true; btn.textContent = "Uploading & Adding...";
-
-  const imageUrls = [];
-  for(let i=0;i<files.length;i++){
-    const file = files[i];
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const fileName = `product_${Date.now()}_${i}_${safeName}`;
-    const { error: uploadErr } = await db.storage.from('product-images').upload(fileName, file);
-    if(uploadErr){
-      alert("Image " + (i+1) + " upload failed: " + uploadErr.message);
-      btn.disabled = false; btn.textContent = "➕ Add Product";
-      return;
-    }
-    const { data: urlData } = db.storage.from('product-images').getPublicUrl(fileName);
-    if(urlData && urlData.publicUrl) imageUrls.push(urlData.publicUrl);
-  }
-
-  const newProd = {
-    name: document.getElementById("pName").value.trim(),
-    price: Number(document.getElementById("pPrice").value),
-    category: document.getElementById("pCategory").value,
-    stock: 1,
-    description: document.getElementById("pDescription").value.trim(),
-    specs: document.getElementById("pSpecs").value.trim(),
-    image_url: imageUrls[0],
-    product_images: imageUrls
-  };
-
-  const { error } = await db.from('products').insert([newProd]);
-
-  btn.disabled = false; btn.textContent = "➕ Add Product";
-
-  if(error){
-    alert("Failed to add product: " + error.message);
-  } else {
-    e.target.reset();
-    await fetchProducts();
-    renderAdmin();
-    alert("✅ Product added successfully!");
-  }
-}
-
-// ===== Real-time listener =====
-db.channel('schema-db-changes')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
-    fetchProducts();
-  })
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
-    if(document.getElementById("myOrdersModal").style.display === "block") loadMyOrders();
-    if(!adminSignedIn) return;
-    if(payload.eventType === 'INSERT') beep();
-    refreshBadge();
-    if(document.getElementById("adminModal").style.display === "block"){
-      renderAdmin();
-    }
-  })
-  .subscribe();
-
-// Restore current login session
-db.auth.getSession().then(({ data }) => updateSessionUI(data.session));
-db.auth.onAuthStateChange((_event, session) => {
-  setTimeout(() => updateSessionUI(session), 0);
-});
-
-// Initial load
-renderAuthUI();
-renderContact();
-renderDepositInfo();
-loadDepositAmount();
-fetchProducts();
-</script>
-</body>
-</html>
+  if(error){ alert("Failed to delete order: " + error.message)
