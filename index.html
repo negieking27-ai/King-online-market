@@ -1009,4 +1009,188 @@ async function changeStatus(id, newStatus){
 async function deleteOrder(id){
   if(!confirm("Delete this order? This can't be undone.")) return;
   const { error } = await db.from('orders').delete().eq('id', id);
-  if(error){ alert("Failed to delete order: " + error.message)
+  if(error){ alert("Failed to delete order: " + error.message); return; }
+  renderAdmin();
+}
+
+// ======================================================================
+// 11. ADMIN: products (add, edit, sold out, delete) + deposit setting
+// ======================================================================
+
+function previewProductImages(input){
+  const files = Array.from(input.files || []);
+  const box = document.getElementById("productImagePreview");
+  if(files.length > 5){
+    alert("❌ You can select a maximum of 5 images.");
+    input.value = "";
+    box.innerHTML = "";
+    return;
+  }
+  box.innerHTML = files.map(file => `<img src="${URL.createObjectURL(file)}" alt="Product preview">`).join("");
+}
+
+async function saveDepositAmount(){
+  const input = document.getElementById("adminDepositInput");
+  const amount = Number(input && input.value);
+  if(!Number.isFinite(amount) || amount < 0){ alert("❌ Enter a valid deposit amount."); return; }
+  const {error} = await db.from("market_settings").upsert({id:1, deposit_amount:amount, updated_at:new Date().toISOString()});
+  if(error){ alert("❌ Could not save deposit amount: " + error.message); return; }
+  DEPOSIT_AMOUNT = amount;
+  renderDepositInfo();
+  document.getElementById("adminDepositAmount").textContent = amount.toLocaleString();
+  alert("✅ Deposit amount updated to ETB " + amount.toLocaleString());
+}
+
+function renderAdminProducts(){
+  document.getElementById("adminProducts").innerHTML = products.map(p => {
+    const sold = isSoldOut(p);
+    return `
+    <div class="order-item" style="display:flex;gap:12px;align-items:center">
+      <img src="${escapeHtml(getProductImages(p)[0])}"
+           alt="${escapeHtml(p.name)}"
+           style="width:70px;height:70px;object-fit:cover;border-radius:9px">
+      <div style="flex:1"><b>${escapeHtml(p.name)}</b><br>
+      ETB ${Number(p.price).toLocaleString()} •
+      <span style="font-weight:bold;color:${sold ? '#d92d20' : '#079455'}">${sold ? 'Sold out' : 'Available'}</span>
+      <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+        <button type="button" class="mini" onclick="toggleProduct(${p.id})" style="background:${sold ? '#dcfae6' : '#fef0c7'};color:${sold ? '#067647' : '#93370d'}">${sold ? '✅ Mark available' : '⛔ Mark sold out'}</button>
+        <button type="button" class="mini" onclick="editProduct(${p.id})" style="background:#eef4ff;color:#243b8f">✏️ Edit</button>
+        <button type="button" class="mini" onclick="deleteProduct(${p.id})" style="background:#fee4e2;color:#d92d20">🗑️ Delete</button>
+      </div></div>
+    </div>`;
+  }).join("") || "<p>No products yet.</p>";
+}
+
+async function toggleProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  const newStock = isSoldOut(p) ? 1 : 0;
+  const { error } = await db.from('products').update({ stock: newStock }).eq('id', id);
+  if(error){ alert("Failed to update product: " + error.message); return; }
+  await fetchProducts();
+  renderAdminProducts();
+}
+
+async function editProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  const name = prompt("Product name:", p.name);
+  if(name === null) return;
+  const priceInput = prompt("Price (ETB):", p.price);
+  if(priceInput === null) return;
+  const price = Number(priceInput);
+  if(!name.trim() || isNaN(price) || price < 0){ alert("❌ Enter a valid name and price."); return; }
+  const description = prompt("Description (shown in product details):", p.description || "");
+  if(description === null) return;
+  const specs = prompt("Specifications, one per line as Key: Value:", p.specs || "");
+  if(specs === null) return;
+
+  const { error } = await db.from('products')
+    .update({ name: name.trim(), price, description: description.trim(), specs: specs.trim() })
+    .eq('id', id);
+  if(error){ alert("Failed to update product: " + error.message); return; }
+  await fetchProducts();
+  renderAdmin();
+}
+
+async function deleteProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!confirm("Delete \"" + (p ? p.name : "this product") + "\"? This can't be undone.")) return;
+  const { error } = await db.from('products').delete().eq('id', id);
+  if(error){ alert("Failed to delete product: " + error.message); return; }
+  await fetchProducts();
+  renderAdmin();
+}
+
+async function addProduct(e){
+  e.preventDefault();
+  const files = Array.from(document.getElementById("pImage").files || []);
+  if(!files.length){ alert("Please select at least 1 product image."); return; }
+  if(files.length > 5){ alert("❌ You can upload a maximum of 5 images."); return; }
+
+  const btn = document.getElementById("pAddBtn");
+  btn.disabled = true; btn.textContent = "Uploading & Adding...";
+
+  const imageUrls = [];
+  for(let i=0;i<files.length;i++){
+    const file = files[i];
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const fileName = `product_${Date.now()}_${i}_${safeName}`;
+    const { error: uploadErr } = await db.storage.from('product-images').upload(fileName, file);
+    if(uploadErr){
+      alert("Image " + (i+1) + " upload failed: " + uploadErr.message);
+      btn.disabled = false; btn.textContent = "➕ Add Product";
+      return;
+    }
+    const { data: urlData } = db.storage.from('product-images').getPublicUrl(fileName);
+    if(urlData && urlData.publicUrl) imageUrls.push(urlData.publicUrl);
+  }
+
+  const newProd = {
+    name: document.getElementById("pName").value.trim(),
+    price: Number(document.getElementById("pPrice").value),
+    category: document.getElementById("pCategory").value,
+    stock: 1,
+    description: document.getElementById("pDescription").value.trim(),
+    specs: document.getElementById("pSpecs").value.trim(),
+    image_url: imageUrls[0],
+    product_images: imageUrls
+  };
+
+  const { error } = await db.from('products').insert([newProd]);
+
+  btn.disabled = false; btn.textContent = "➕ Add Product";
+
+  if(error){
+    alert("Failed to add product: " + error.message);
+  } else {
+    e.target.reset();
+    await fetchProducts();
+    renderAdmin();
+    alert("✅ Product added successfully!");
+  }
+}
+
+// ======================================================================
+// 12. REAL-TIME UPDATES, EVENT LISTENERS AND START-UP
+// ======================================================================
+
+db.channel('schema-db-changes')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
+    fetchProducts();
+  })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+    if(document.getElementById("myOrdersModal").style.display === "block") loadMyOrders();
+    if(!adminSignedIn) return;
+    if(payload.eventType === 'INSERT') beep();
+    refreshBadge();
+    if(document.getElementById("adminModal").style.display === "block"){
+      renderAdmin();
+    }
+  })
+  .subscribe();
+
+// Restore the saved login session when the page opens
+db.auth.getSession().then(({ data }) => updateSessionUI(data.session));
+
+db.auth.onAuthStateChange((_event, session) => {
+  setTimeout(() => updateSessionUI(session), 0);
+});
+
+document.getElementById("orderForm").addEventListener("input", e => { e.target.style.borderColor = ""; });
+
+document.getElementById("search").addEventListener("input", render);
+
+// Initial load
+renderAuthUI();
+
+renderContact();
+
+renderDepositInfo();
+
+loadDepositAmount();
+
+fetchProducts();
+</script>
+</body>
+</html>
